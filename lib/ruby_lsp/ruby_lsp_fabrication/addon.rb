@@ -3,23 +3,18 @@
 require 'ruby_lsp/addon'
 require 'ruby_lsp/internal'
 
-require_relative 'code_lens'
+require_relative 'document_symbol'
 
 module RubyLsp
   module RSpec
     class Addon < ::RubyLsp::Addon
-      def activate(global_state, message_queue)
-        p 'I am right here'
-      end
+      def activate(global_state, message_queue); end
 
       def deactivate; end
 
-      # Creates a new CodeLens listener. This method is invoked on every CodeLens request
-      # def create_code_lens_listener(response_builder, uri, dispatcher)
-      #   # return unless uri.to_standardized_path&.end_with?("_test.rb")
-
-      #   CodeLens.new(response_builder, uri, dispatcher)
-      # end
+      def create_document_symbol_listener(response_builder, dispatcher)
+        DocumentSymbol.new(response_builder, dispatcher)
+      end
 
       def name
         'Ruby LSP Fabrication'
