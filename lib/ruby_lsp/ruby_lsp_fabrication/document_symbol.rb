@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RubyLsp
-  module RSpec
+  module Fabrication
     class DocumentSymbol
       include ::RubyLsp::Requests::Support::Common
 
