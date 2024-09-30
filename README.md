@@ -1,5 +1,7 @@
 # Ruby LSP Fabrication
 
+[![Gem Version](https://badge.fury.io/rb/ruby-lsp-fabrication.svg)](https://badge.fury.io/rb/ruby-lsp-fabrication)
+
 Ruby LSP Fabrication is a [Ruby LSP](https://github.com/Shopify/ruby-lsp) addon for displaying and linking [Fabricators](https://fabricationgem.org/)
 
 ## Installation
