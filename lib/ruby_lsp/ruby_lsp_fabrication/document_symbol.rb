@@ -36,14 +36,14 @@ module RubyLsp
         arguments = node.compact_child_nodes.first
         name = arguments.compact_child_nodes.first.value
 
-        "#{name.titleize} Fabricator"
+        "#{name} Fabricator"
       end
 
       def generate_fabricate_name(node)
         arguments = node.compact_child_nodes.first
         name = arguments.compact_child_nodes.first.value
 
-        "Fabricated #{name.titleize}"
+        "Fabricated #{name}"
       end
     end
   end
