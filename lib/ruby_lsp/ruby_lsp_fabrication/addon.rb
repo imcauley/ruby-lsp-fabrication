@@ -6,7 +6,7 @@ require 'ruby_lsp/internal'
 require_relative 'document_symbol'
 
 module RubyLsp
-  module RSpec
+  module Fabrication
     class Addon < ::RubyLsp::Addon
       def activate(global_state, message_queue); end
 
