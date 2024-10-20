@@ -10,13 +10,13 @@ module RubyLsp
         @uri = uri
         @node_context = node_context
         @index = index
-        dispatcher.register(self, :on_call_node_enter)
+        dispatcher.register(self, :on_symbol_node_enter)
       end
 
-      def on_call_node_enter(node)
-        return unless node.message == 'Fabricate'
+      def on_symbol_node_enter(node)
+        return unless @node_context.call_node.message == 'Fabricate'
 
-        fabricator_name = generate_fabricator_name(node)
+        fabricator_name = generate_fabricator_name(@node_context.call_node)
         entries = @index[fabricator_name]
         return if entries.blank? || entries.empty?
 
