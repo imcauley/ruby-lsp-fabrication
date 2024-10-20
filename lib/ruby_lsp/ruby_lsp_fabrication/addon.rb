@@ -10,7 +10,7 @@ require_relative 'definition'
 module RubyLsp
   module Fabrication
     class Addon < ::RubyLsp::Addon
-      def activate(global_state, message_queue)
+      def activate(global_state, _message_queue)
         @index = global_state.index
         @index.register_enhancement(IndexingEnhancement.new)
       end
