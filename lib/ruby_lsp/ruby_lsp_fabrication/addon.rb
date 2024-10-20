@@ -28,6 +28,10 @@ module RubyLsp
       def name
         'Ruby LSP Fabrication'
       end
+
+      def version
+        VERSION
+      end
     end
   end
 end
