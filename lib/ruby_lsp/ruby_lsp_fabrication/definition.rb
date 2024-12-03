@@ -14,26 +14,26 @@ module RubyLsp
       end
 
       def on_symbol_node_enter(node)
-        if @node_context.call_node.message == 'Fabricator' && inherited?(node)
-          entries = @index["#{node.value}Fabricator"]
+        handle_fabricator(node) if @node_context.call_node.message == 'Fabricator'
+        handle_fabricate if @node_context.call_node.message == 'Fabricate'
+      end
 
-          return if entries.blank? || entries.empty?
+      def handle_fabricator(node)
+        return unless inherited?(node)
 
-          entries.each do |entry|
-            @response_builder << Interface::LocationLink.new(
-              target_uri: URI::Generic.from_path(path: entry.file_path).to_s,
-              target_range: range_from_location(entry.location),
-              target_selection_range: range_from_location(entry.name_location)
-            )
-          end
+        entries = @index["#{node.value}Fabricator"]
 
-          return
-        end
+        link(entries)
+      end
 
-        return unless @node_context.call_node.message == 'Fabricate'
-
+      def handle_fabricate
         fabricator_name = generate_fabricator_name(@node_context.call_node)
         entries = @index[fabricator_name]
+
+        link(entries)
+      end
+
+      def link(entries)
         return if entries.blank? || entries.empty?
 
         entries.each do |entry|
@@ -46,13 +46,13 @@ module RubyLsp
       end
 
       def inherited?(node)
-        @node_context.parent.compact_child_nodes.first.compact_child_nodes.each do |n|
+        @node_context.call_node.arguments.arguments.each do |n|
           next unless n.type == :keyword_hash_node
 
-          first_child = n.compact_child_nodes.first
-          next unless first_child.type == :assoc_node
-          next unless first_child.key.value == 'from'
-          next unless first_child.value.value == node.value
+          kwh_node = n.compact_child_nodes.first
+          next unless kwh_node.type == :assoc_node &&
+                      kwh_node.key.value == 'from' &&
+                      kwh_node.value.value == node.value
 
           return true
         end
