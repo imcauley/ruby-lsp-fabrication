@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'utils'
+
 module RubyLsp
   module Fabrication
     class DocumentSymbol
@@ -14,15 +16,21 @@ module RubyLsp
       def on_call_node_enter(node)
         case node.message
         when 'Fabricator'
+          name = Utils.get_name_from_fabricator(node)
+          return unless name
+
           @response_builder.last.children << RubyLsp::Interface::DocumentSymbol.new(
-            name: generate_fabricator_name(node),
+            name: name,
             kind: LanguageServer::Protocol::Constant::SymbolKind::CLASS,
             selection_range: range_from_node(node),
             range: range_from_node(node)
           )
         when 'Fabricate'
+          name = Utils.get_name_from_fabricate(node)
+          return unless name
+
           @response_builder.last.children << RubyLsp::Interface::DocumentSymbol.new(
-            name: generate_fabricate_name(node),
+            name: name,
             kind: LanguageServer::Protocol::Constant::SymbolKind::OBJECT,
             selection_range: range_from_node(node),
             range: range_from_node(node)
@@ -31,20 +39,6 @@ module RubyLsp
       end
 
       def on_call_node_leave(node); end
-
-      def generate_fabricator_name(node)
-        arguments = node.compact_child_nodes.first
-        name = arguments.compact_child_nodes.first.value
-
-        "#{name.titleize} Fabricator"
-      end
-
-      def generate_fabricate_name(node)
-        arguments = node.compact_child_nodes.first
-        name = arguments.compact_child_nodes.first.value
-
-        "Fabricated #{name.titleize}"
-      end
     end
   end
 end
